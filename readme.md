@@ -55,6 +55,7 @@ The relationships between these entities are as follows:
 - Account (1) ---< Budget (1 to many)
 - Account (1) ---< Goal (1 to many)
 - Account (1) ---< Reminder (1 to many)
+- User (1) ---< EducationResource (1 to many)
 
 This ERD ensures a comprehensive and organized database structure to support the functionalities of WalletBuddy.
 
