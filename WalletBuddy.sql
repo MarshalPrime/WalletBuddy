@@ -1,0 +1,59 @@
+CREATE TABLE User (
+    UserID INT PRIMARY KEY AUTO_INCREMENT,
+    UserName VARCHAR(255) NOT NULL,
+    FullName VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) NOT NULL,
+    PhoneNumber VARCHAR(20),
+    Location VARCHAR(255),
+    Job VARCHAR(255)
+);
+
+CREATE TABLE Account (
+    AccountID INT PRIMARY KEY AUTO_INCREMENT,
+    UserID INT NOT NULL,
+    FOREIGN KEY (UserID) REFERENCES User(UserID)
+);
+
+CREATE TABLE Category (
+    CategoryID INT PRIMARY KEY AUTO_INCREMENT,
+    CategoryName VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Transaction (
+    TransactionID INT PRIMARY KEY AUTO_INCREMENT,
+    AccountID INT NOT NULL,
+    Date DATE NOT NULL,
+    Amount DECIMAL(10, 2) NOT NULL,
+    CategoryID INT NOT NULL,
+    FOREIGN KEY (AccountID) REFERENCES Account(AccountID),
+    FOREIGN KEY (CategoryID) REFERENCES Category(CategoryID)
+);
+
+CREATE TABLE Goal (
+    GoalID INT PRIMARY KEY AUTO_INCREMENT,
+    AccountID INT NOT NULL,
+    Description TEXT NOT NULL,
+    TargetAmount DECIMAL(10, 2) NOT NULL,
+    AchievedAmount DECIMAL(10, 2) NOT NULL,
+    TargetDate DATE NOT NULL,
+    Status VARCHAR(50) NOT NULL,
+    FOREIGN KEY (AccountID) REFERENCES Account(AccountID)
+);
+
+CREATE TABLE Reminder (
+    ReminderID INT PRIMARY KEY AUTO_INCREMENT,
+    AccountID INT NOT NULL,
+    BillName VARCHAR(255) NOT NULL,
+    DueDate DATE NOT NULL,
+    Recurring BOOLEAN NOT NULL,
+    FOREIGN KEY (AccountID) REFERENCES Account(AccountID)
+);
+
+CREATE TABLE EducationResource (
+    ResourceID INT PRIMARY KEY AUTO_INCREMENT,
+    Title VARCHAR(255) NOT NULL,
+    Description TEXT,
+    URL VARCHAR(255) NOT NULL,
+    UserID INT NOT NULL,
+    FOREIGN KEY (UserID) REFERENCES User(UserID)
+);
