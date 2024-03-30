@@ -22,7 +22,6 @@ connection.connect(err => {
     }
     console.log('Connected to database');
   });
-  
 
 app.use(bodyParser.json());
 
