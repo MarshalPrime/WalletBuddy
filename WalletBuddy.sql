@@ -3,6 +3,7 @@ CREATE TABLE User (
     UserName VARCHAR(255) NOT NULL,
     FullName VARCHAR(255) NOT NULL,
     Email VARCHAR(255) NOT NULL,
+    Password VARCHAR(255) NOT NULL,
     PhoneNumber VARCHAR(20),
     Location VARCHAR(255),
     Job VARCHAR(255)
@@ -10,12 +11,13 @@ CREATE TABLE User (
 
 CREATE TABLE Account (
     AccountID INT PRIMARY KEY AUTO_INCREMENT,
-    UserID INT NOT NULL,
+    UserID INT,
     FOREIGN KEY (UserID) REFERENCES User(UserID)
 );
 
 CREATE TABLE Category (
     CategoryID INT PRIMARY KEY AUTO_INCREMENT,
+    AccountName VARCHAR(255) NOT NULL,
     CategoryName VARCHAR(255) NOT NULL
 );
 
