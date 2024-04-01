@@ -17,7 +17,6 @@ CREATE TABLE Account (
 
 CREATE TABLE Category (
     CategoryID INT PRIMARY KEY AUTO_INCREMENT,
-    AccountName VARCHAR(255) NOT NULL,
     CategoryName VARCHAR(255) NOT NULL
 );
 
