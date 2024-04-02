@@ -3,8 +3,13 @@ import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "../App";
 
 const Register = () => {
+  const [userName, setUserName] = useState("");
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [location, setLocation] = useState("");
+  const [job, setJob] = useState("");
   const { isLoggedIn } = useAuth();
 
   const handleSubmit = (e) => {

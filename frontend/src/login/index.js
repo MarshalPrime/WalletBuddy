@@ -14,6 +14,7 @@ const Login = () => {
     login();
     setRedirectToReferrer(true);
   };
+  console.log(isLoggedIn);
 
   if (isLoggedIn) {
     return <Navigate to="/" />;

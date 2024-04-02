@@ -37,9 +37,9 @@ const App = () => {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" exact render={() => <Home />} />
-          <Route path="/login" render={() => <Login />} />
-          <Route path="/register" render={() => <Register />} />
+          <Route path="/" exact element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
