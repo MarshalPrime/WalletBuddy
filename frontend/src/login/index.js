@@ -1,18 +1,37 @@
 import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "../App";
+import axios from "axios";
+import "./login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
   const [redirectToReferrer, setRedirectToReferrer] = useState(false);
-  const { isLoggedIn, login } = useAuth();
+  const { isLoggedIn, login, setUser } = useAuth();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Perform login logic (e.g., API request)
-    login();
-    setRedirectToReferrer(true);
+    axios
+      .post("http://localhost:3000/login", {
+        Email: email,
+        Password: password,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setError(null);
+        setMessage(res.data.message);
+        setUser(res.data.userID);
+        login();
+        setRedirectToReferrer(true);
+      })
+      .catch((err) => {
+        console.error(err);
+        setMessage(null);
+        setError(err.response.data.error);
+      });
   };
   console.log(isLoggedIn);
 
@@ -21,7 +40,7 @@ const Login = () => {
   }
 
   return (
-    <div>
+    <div className="login-container">
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
         <input
@@ -40,7 +59,13 @@ const Login = () => {
         />
         <button type="submit">Login</button>
       </form>
-      <Link to="/register">Register</Link>
+      {message && <p className="message">{message}</p>}
+      {error && <p className="error">{error}</p>}
+      <div className="register-btn-container">
+        <Link to="/register" className="register-btn">
+          Register
+        </Link>
+      </div>
     </div>
   );
 };
