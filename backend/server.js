@@ -1,17 +1,20 @@
 // server.js
 
 const express = require("express");
+var cors = require("cors");
 const bodyParser = require("body-parser");
 const mysql = require("mysql");
 
 const app = express();
+
 const port = process.env.PORT || 3000;
+app.use(cors());
 
 // Database connection
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "Godblessabayo@1",
+  password: "root",
   database: "walletbuddy",
 });
 
@@ -25,20 +28,35 @@ connection.connect((err) => {
 
 app.use(bodyParser.json());
 
-// API endpoint for user registration
 app.post("/register", (req, res) => {
   const { UserName, FullName, Email, Password, PhoneNumber, Location, Job } =
     req.body;
-  const query = `INSERT INTO User (UserName, FullName, Email, Password, PhoneNumber, Location, Job) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
+  // Check if the email already exists
   connection.query(
-    query,
-    [UserName, FullName, Email, Password, PhoneNumber, Location, Job],
+    "SELECT * FROM User WHERE Email = ?",
+    [Email],
     (err, result) => {
       if (err) {
         res.status(500).json({ error: "Failed to register user" });
         console.log(err);
+      } else if (result.length > 0) {
+        res.status(400).json({ error: "User already exists with this email" });
       } else {
-        res.status(200).json({ message: "User registered successfully" });
+        // Insert the new user
+        const query = `INSERT INTO User (UserName, FullName, Email, Password, PhoneNumber, Location, Job) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+        connection.query(
+          query,
+          [UserName, FullName, Email, Password, PhoneNumber, Location, Job],
+          (err, result) => {
+            if (err) {
+              res.status(500).json({ error: "Failed to register user" });
+              console.log(err);
+            } else {
+              res.status(200).json({ message: "User registered successfully" });
+            }
+          }
+        );
       }
     }
   );
@@ -62,29 +80,73 @@ app.post("/login", (req, res) => {
   });
 });
 
-// API endpoint for creating an account
 app.post("/accounts", (req, res) => {
-  const { AccountName, userID} = req.body;
-  //const userid = req.userID; // Assuming userID is obtained from the login process
-  console.log("user", userID);
-  const accountQuery = `INSERT INTO Account (AccountName, UserID) VALUES (?, ?)`;
+  const { AccountName, userID } = req.body;
+
+  // Check if the account name already exists
   connection.query(
-    accountQuery,
-    [AccountName, userID],
-    (err, accountResult) => {
+    "SELECT * FROM Account WHERE AccountName = ?",
+    [AccountName],
+    (err, result) => {
       if (err) {
-        res.status(500).json({ error: "Failed to create account " });
+        res.status(500).json({ error: "Failed to create account" });
         console.log(err);
-        console.log("UserID failed:", userid);
+      } else if (result.length > 0) {
+        res.status(400).json({ error: "Account name already exists" });
       } else {
-        res
-          .status(200)
-          .json({ message: "Account created successfully" });
+        // Insert the new account
+        const accountQuery = `INSERT INTO Account (AccountName, UserID) VALUES (?, ?)`;
+        connection.query(
+          accountQuery,
+          [AccountName, userID],
+          (err, accountResult) => {
+            if (err) {
+              res.status(500).json({ error: "Failed to create account" });
+              console.log(err);
+            } else {
+              res.status(200).json({ message: "Account created successfully" });
+            }
+          }
+        );
       }
     }
   );
 });
 
+app.post("/category", (req, res) => {
+  const { CategoryName } = req.body;
+
+  // Check if the category name already exists
+  connection.query(
+    "SELECT * FROM Category WHERE CategoryName = ?",
+    [CategoryName],
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ error: "Failed to create category" });
+        console.log(err);
+      } else if (result.length > 0) {
+        res.status(400).json({ error: "Category name already exists" });
+      } else {
+        // Insert the new category
+        const categoryQuery = `INSERT INTO Category (CategoryName) VALUES (?)`;
+        connection.query(
+          categoryQuery,
+          [CategoryName],
+          (err, categoryResult) => {
+            if (err) {
+              res.status(500).json({ error: "Failed to create category" });
+              console.log(err);
+            } else {
+              res
+                .status(200)
+                .json({ message: "Category created successfully" });
+            }
+          }
+        );
+      }
+    }
+  );
+});
 
 // API endpoint for adding a transaction
 app.post("/transactions", (req, res) => {
@@ -101,17 +163,19 @@ app.post("/transactions", (req, res) => {
       if (results.length > 0) {
         // Account found, proceed with transaction insertion
         const accountName = results[0].AccountName;
-        console.log(accountName)
-        const query = `INSERT INTO Transaction (AccountID, AccountName, Date, Amount, CategoryID) VALUES (?, ?, ?, ?, ?)`;
+        console.log(accountName);
+        const query = `INSERT INTO Transaction (AccountID, Date, Amount, CategoryID) VALUES (?, ?, ?, ?)`;
         connection.query(
           query,
-          [AccountID, accountName, Date, Amount, CategoryID],
+          [AccountID, Date, Amount, CategoryID],
           (err, result) => {
             if (err) {
               res.status(500).json({ error: "Failed to add transaction" });
               console.log(err);
             } else {
-              res.status(200).json({ message: "Transaction added successfully" });
+              res
+                .status(200)
+                .json({ message: "Transaction added successfully" });
             }
           }
         );
@@ -123,7 +187,6 @@ app.post("/transactions", (req, res) => {
     }
   });
 });
-
 
 // Start the server
 app.listen(port, () => {
