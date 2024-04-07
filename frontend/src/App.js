@@ -5,6 +5,7 @@ import Login from "./login";
 import Register from "./register";
 import Accounts from "./accounts/accounts";
 import Account from "./accounts/account";
+import Footer from "./footer";
 
 const AuthContext = createContext();
 
@@ -52,6 +53,7 @@ const App = () => {
           <Route path="/bank-accounts" element={<Accounts />} />
           <Route path="/bank-accounts/:id" element={<Account />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </AuthProvider>
   );
