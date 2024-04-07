@@ -5,6 +5,7 @@ import AddAccount from "./addAccount";
 import AddCategory from "./addCategory";
 import AddTransaction from "./addTransaction";
 import walletBuddyImg from "../assets/images/wallet-buddy.png";
+import AddReminder from "./addReminder";
 import "./home.css";
 
 const Home = () => {
@@ -25,6 +26,7 @@ const Home = () => {
           <li onClick={() => setActiveTab("addTransaction")}>
             Add Transaction
           </li>
+          <li onClick={() => setActiveTab("addReminder")}>Add Bill Reminder</li>
           <li onClick={logout}>Logout</li>
         </ul>
       </nav>
@@ -34,6 +36,7 @@ const Home = () => {
       {activeTab === "addAccount" && <AddAccount />}
       {activeTab === "addCategory" && <AddCategory />}
       {activeTab === "addTransaction" && <AddTransaction />}
+      {activeTab === "addReminder" && <AddReminder />}
     </div>
   );
 };

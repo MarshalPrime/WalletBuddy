@@ -188,6 +188,44 @@ app.post("/transactions", (req, res) => {
   });
 });
 
+// API endpoint for adding a reminder
+app.post("/reminder", (req, res) => {
+  const { AccountID, DueDate, Amount, Recurring, BillName } = req.body;
+
+  // Query to retrieve account name
+  const selectAcc = `SELECT AccountName FROM Account WHERE AccountID = ?`;
+
+  connection.query(selectAcc, [AccountID], (err, results) => {
+    if (err) {
+      res.status(500).json({ error: "Failed to retrieve account name" });
+      console.log(err);
+    } else {
+      if (results.length > 0) {
+        // Account found, proceed with transaction insertion
+        const accountName = results[0].AccountName;
+        console.log(accountName);
+        const query = `INSERT INTO Reminder (AccountID, DueDate, Amount, Recurring, BillName) VALUES (?, ?, ?, ?, ?)`;
+        connection.query(
+          query,
+          [AccountID, DueDate, Amount, Recurring, BillName],
+          (err, result) => {
+            if (err) {
+              res.status(500).json({ error: "Failed to add reminder" });
+              console.log(err);
+            } else {
+              res.status(200).json({ message: "Reminder added successfully" });
+            }
+          }
+        );
+      } else {
+        // No account found for the given AccountID
+        res.status(404).json({ error: "Account not found" });
+        console.log(err);
+      }
+    }
+  });
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
