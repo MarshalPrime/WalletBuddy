@@ -49,7 +49,7 @@ const Accounts = () => {
       <ul className="accounts-list">
         {accounts.map((account) => (
           <li key={account.AccountID}>
-            <Link to={`/bank-accounts/${account.AccountID}`}>
+            <Link to={`/bank-accounts/${account.AccountName}`}>
               {account.AccountName}
             </Link>
           </li>

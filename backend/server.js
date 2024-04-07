@@ -228,12 +228,13 @@ app.post("/reminder", (req, res) => {
 
 // API endpoint for getting reminders based on due date
 app.get("/reminders", (req, res) => {
-  const { dueDate } = req.query;
+  const { AccountID, DueDate } = req.query;
 
+  console.log(DueDate);
   // Query to retrieve reminders based on due date
-  const query = `SELECT * FROM Reminder WHERE DueDate <= ?`;
+  const query = `SELECT * FROM Reminder WHERE AccountID = ? AND DueDate <= ?`;
 
-  connection.query(query, [dueDate], (err, results) => {
+  connection.query(query, [AccountID, DueDate], (err, results) => {
     if (err) {
       res.status(500).json({ error: "Failed to retrieve reminders" });
       console.log(err);

@@ -4,6 +4,7 @@ import Home from "./home";
 import Login from "./login";
 import Register from "./register";
 import Accounts from "./accounts/accounts";
+import Account from "./accounts/account";
 
 const AuthContext = createContext();
 
@@ -49,7 +50,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/bank-accounts" element={<Accounts />} />
-          {/* <Route path="/bank-accounts/:id" element={<Account />} /> */}
+          <Route path="/bank-accounts/:id" element={<Account />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
