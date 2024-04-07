@@ -226,6 +226,54 @@ app.post("/reminder", (req, res) => {
   });
 });
 
+// API endpoint for getting reminders based on due date
+app.get("/reminders", (req, res) => {
+  const { dueDate } = req.query;
+
+  // Query to retrieve reminders based on due date
+  const query = `SELECT * FROM Reminder WHERE DueDate <= ?`;
+
+  connection.query(query, [dueDate], (err, results) => {
+    if (err) {
+      res.status(500).json({ error: "Failed to retrieve reminders" });
+      console.log(err);
+    } else {
+      res.status(200).json({ reminders: results });
+    }
+  });
+});
+
+// API endpoint for getting all the bank accounts
+app.get("/accounts", (req, res) => {
+  const { UserID, AccountName } = req.query;
+
+  // Check if the user ID exists in the database
+  const userQuery = `SELECT * FROM User WHERE UserID = ?`;
+
+  connection.query(userQuery, [UserID], (err, userResults) => {
+    if (err) {
+      res.status(500).json({ error: "Failed to check user ID" });
+      console.log(err);
+    } else if (userResults.length === 0) {
+      res.status(404).json({ error: "No user found with this ID" });
+    } else {
+      // Query to retrieve all the bank accounts
+      const query = AccountName
+        ? `SELECT * FROM Account WHERE UserID = ? AND AccountName = ?`
+        : `SELECT * FROM Account WHERE UserID = ?`;
+
+      connection.query(query, [UserID, AccountName], (err, results) => {
+        if (err) {
+          res.status(500).json({ error: "Failed to retrieve bank accounts" });
+          console.log(err);
+        } else {
+          res.status(200).json({ reminders: results });
+        }
+      });
+    }
+  });
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

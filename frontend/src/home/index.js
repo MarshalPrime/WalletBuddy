@@ -27,6 +27,9 @@ const Home = () => {
             Add Transaction
           </li>
           <li onClick={() => setActiveTab("addReminder")}>Add Bill Reminder</li>
+          <li>
+            <Link to={`/bank-accounts`}>My Bank Accounts</Link>
+          </li>
           <li onClick={logout}>Logout</li>
         </ul>
       </nav>

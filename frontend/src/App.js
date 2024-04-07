@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./home";
 import Login from "./login";
 import Register from "./register";
+import Accounts from "./accounts/accounts";
 
 const AuthContext = createContext();
 
@@ -47,6 +48,8 @@ const App = () => {
           <Route path="/" exact element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/bank-accounts" element={<Accounts />} />
+          {/* <Route path="/bank-accounts/:id" element={<Account />} /> */}
         </Routes>
       </BrowserRouter>
     </AuthProvider>
