@@ -3,6 +3,7 @@ CREATE TABLE User (
     UserName VARCHAR(255) NOT NULL,
     FullName VARCHAR(255) NOT NULL,
     Email VARCHAR(255) NOT NULL,
+    Password VARCHAR(255) NOT NULL,
     PhoneNumber VARCHAR(20),
     Location VARCHAR(255),
     Job VARCHAR(255)
