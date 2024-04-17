@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../App";
 import axios from "axios";
 import "./addAccount.css"; 
@@ -26,7 +26,9 @@ const AddAccount = () => {
       setError(err.response.data.error);
     });
   };
-
+  useEffect(()=>{},[]);
+  
+  
   return (
     <div className="add-account-container">
       <h2>Add Account</h2>

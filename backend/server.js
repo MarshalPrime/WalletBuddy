@@ -4,6 +4,7 @@ const express = require("express");
 var cors = require("cors");
 const bodyParser = require("body-parser");
 const mysql = require("mysql");
+const basicAuth = require('express-basic-auth');
 
 const app = express();
 
@@ -14,7 +15,21 @@ app.use(cors());
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "root",
+  password: "Godblessabayo@1",
+  database: "walletbuddy",
+});
+
+const basicAuthMiddleware = basicAuth({
+  users: { 'admin': 'admin123' }, // Change this to your actual credentials
+  unauthorizedResponse: { message: 'Unauthorized' }
+});
+
+app.use(basicAuthMiddleware);
+
+const connect_standard = mysql.createConnection({
+  host: "localhost",
+  user: "standard",
+  password: "StndrdPas#1",
   database: "walletbuddy",
 });
 
@@ -234,7 +249,7 @@ app.get("/reminders", (req, res) => {
   // Query to retrieve reminders based on due date
   const query = `SELECT * FROM Reminder WHERE AccountID = ? AND DueDate <= ?`;
 
-  connection.query(query, [AccountID, DueDate], (err, results) => {
+  connect_standard.query(query, [AccountID, DueDate], (err, results) => {
     if (err) {
       res.status(500).json({ error: "Failed to retrieve reminders" });
       console.log(err);
@@ -251,7 +266,7 @@ app.get("/accounts", (req, res) => {
   // Check if the user ID exists in the database
   const userQuery = `SELECT * FROM User WHERE UserID = ?`;
 
-  connection.query(userQuery, [UserID], (err, userResults) => {
+  connect_standard.query(userQuery, [UserID], (err, userResults) => {
     if (err) {
       res.status(500).json({ error: "Failed to check user ID" });
       console.log(err);
