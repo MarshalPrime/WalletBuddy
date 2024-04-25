@@ -16,6 +16,10 @@ const Register = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
+  const username='admin';
+  const passwordd = 'admin123';
+  const token = btoa(`${username}:${passwordd}`);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
@@ -32,7 +36,7 @@ const Register = () => {
         },
         {
           headers: {
-            "Content-type": "application/json; charset=UTF-8",
+            Authorization: `Basic ${token}`
           },
         }
       )
